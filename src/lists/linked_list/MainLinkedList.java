@@ -1,9 +1,5 @@
 package lists.linked_list;
 
-import lists.Node;
-
-import java.util.ArrayList;
-
 public class MainLinkedList {
     public static void main(String[] args) {
         LinkedList<Integer> linkedList = new LinkedList<>();
@@ -46,6 +42,7 @@ public class MainLinkedList {
         System.out.println();
         System.out.println("Remove at position 0: " + linkedList.removeAtPosition(0) + " " + linkedList.toString());
         System.out.println("Remove elem 50: " + linkedList.remove(50));
+
 
         linkedList.clear();
         System.out.println("Clear list - size: " + linkedList.getSize() + ", is empty: " + linkedList.isEmpty());

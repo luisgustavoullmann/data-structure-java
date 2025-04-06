@@ -1,4 +1,4 @@
-package lists;
+package lists.linked_list;
 
 public class Node<T> {
     private T value;

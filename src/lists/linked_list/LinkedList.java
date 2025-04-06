@@ -1,7 +1,5 @@
 package lists.linked_list;
 
-import lists.Node;
-
 public class LinkedList<T> {
     private Node<T> head;
     private int size;
@@ -140,6 +138,16 @@ public class LinkedList<T> {
         if (this.isEmpty() || index == -1) return false;
         this.removeAtPosition(index);
         return true;
+    }
+
+    public Object[] toArray() {
+        Object[] arr = new Object[getSize()];
+        Node<T> current = this.head;
+        for (int i = 0; i < getSize(); i ++) {
+            arr[i] = current.getValue();
+            current = current.getNext();
+        }
+        return arr;
     }
 
     @Override
