@@ -207,4 +207,115 @@ public class GraphListDirectedWeighted {
         recStack[v] = false;
         return false;
     }
+
+    public Pair<List<Integer>, List<Integer>> dijkstra(int source) {
+        int[] dist = new int[this.numVertices];
+        int[] previous = new int[this.numVertices];
+        boolean[] visited = new boolean[this.numVertices];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(previous, -1);
+
+        for (int k = 0; k < this.numVertices; k++) {
+            int current = -1;
+
+            for (int i = 0; i < this.numVertices; i++) {
+                if (visited[i]) continue;
+                if (current == -1 || dist[i] < dist[current]) {
+                    current = i;
+                }
+            }
+
+            if (current == -1) break;
+            visited[current] = true;
+
+            for (Edge edge : this.adjList.get(current)) {
+                int neighbor = edge.dest;
+                int weight = edge.weight;
+
+                if (dist[current] + weight < dist[neighbor]) {
+                    dist[neighbor] = dist[current]  + weight;
+                    previous[neighbor] = current;
+                }
+            }
+        }
+        List<Integer> distList = new ArrayList<>();
+        List<Integer> prevList = new ArrayList<>();
+        for (int i = 0; i < this.numVertices; i++) {
+            distList.add(dist[i]);
+            prevList.add(previous[i]);
+        }
+
+        return new Pair<>(distList, prevList);
+    }
+
+
+    // Bellman-Ford
+    public List<int[]> getAllEdges() {
+        List<int[]> edges = new ArrayList<>();
+        for (int u = 0; u < this.numVertices; u++) {
+            for (Edge edge : adjList.get(u)) {
+                edges.add(new int[]{u, edge.dest, edge.weight});
+            }
+        }
+        return edges;
+    }
+
+    public List<Integer> bellmanFord(int source) {
+        List<Integer> dist = new ArrayList<>();
+        for (int i = 0; i < this.numVertices; i++) {
+            dist.add(Integer.MAX_VALUE);
+        }
+        dist.set(source, 0);
+
+        List<int[]> edges = getAllEdges();
+
+        for (int i = 0; i < this.numVertices - 1; i++) {
+            for (int[] edge : edges) {
+                int u = edge[0];
+                int v = edge[1];
+                int w = edge[2];
+
+                if (dist.get(u) != Integer.MAX_VALUE && dist.get(u) + w < dist.get(v)) {
+                    dist.set(v, dist.get(u) + w);
+                }
+            }
+        }
+
+        // verify negative cycles
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+
+            if (dist.get(u) != Integer.MAX_VALUE && dist.get(u) + w < dist.get(v)) {
+                System.out.println("Graph contains negative weight cycle");
+                return Collections.emptyList();
+            }
+        }
+
+        return dist;
+    }
+
+
+
+
+
+
+
+    // dijkstra, BFS, DFS, Bellman-Ford
+    public List<Integer> recoverPath(int s, List<Integer> previous) {
+        List<Integer> path = new ArrayList<>();
+        int current = s;
+        path.add(current);
+
+        while (previous.get(current) != current && previous.get(current) != -1) {
+            current = previous.get(current);
+            path.add(current);
+        }
+
+        Collections.reverse(path);
+        return path;
+    }
+
 }

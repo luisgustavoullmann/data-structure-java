@@ -47,5 +47,23 @@ public class MainGraphListDirectedWeighted {
         System.out.println("\nTopological Sort:");
         List<Integer> topoOrder = g.toposortDfs();
         System.out.println("Order: " + topoOrder);
+
+
+        // Dijkstra
+        Pair<List<Integer>, List<Integer>> result = g.dijkstra(0);
+        List<Integer> dist = result.first;
+        List<Integer> prev = result.second;
+
+        System.out.println("\nDijkstra from 0:");
+        for (int i = 0; i < dist.size(); i++) {
+            System.out.println("Distance to " + i + ": " + dist.get(i));
+            System.out.println("Path: " + g.recoverPath(i, prev));
+        }
+
+        // Bellman-Ford
+        System.out.println("\nBellman-Ford from 0:");
+        List<Integer> distances = g.bellmanFord(0);
+        System.out.println("Shortest distances from source 0:");
+        System.out.println(distances);
     }
 }
