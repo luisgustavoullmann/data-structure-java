@@ -5,6 +5,7 @@ import java.util.*;
 public class GraphListDirectedWeighted {
     private int numVertices;
     private List<List<Edge>> adjList;
+//    private DisjointSet parentDisjointSet = null;
 
     private static class Edge {
         int dest;
@@ -298,11 +299,6 @@ public class GraphListDirectedWeighted {
     }
 
 
-
-
-
-
-
     // dijkstra, BFS, DFS, Bellman-Ford
     public List<Integer> recoverPath(int s, List<Integer> previous) {
         List<Integer> path = new ArrayList<>();
@@ -317,5 +313,73 @@ public class GraphListDirectedWeighted {
         Collections.reverse(path);
         return path;
     }
+
+
+
+    // Floyd-Warshall
+    public List<List<Integer>> floydWarshall() {
+        int INF = Integer.MAX_VALUE;
+        List<List<Integer>> dist = new ArrayList<>();
+
+        // Initialize distance matrix
+        for (int i = 0; i < this.numVertices; i++) {
+            List<Integer> row = new ArrayList<>();
+            for (int j = 0; j < this.numVertices; j++){
+                if (i == j) {
+                    row.add(0);
+                } else {
+                    row.add(INF);
+                }
+            }
+            dist.add(row);
+        }
+
+        // Set initial distances based on matrix existing edges
+        for (int u = 0; u < this.numVertices; u++) {
+            for (Edge edge : adjList.get(u)) {
+                dist.get(u).set(edge.dest, edge.weight);
+            }
+        }
+
+        // Floyd-Warshall algorithm
+        for (int k = 0; k < this.numVertices; k++) {
+            for (int i = 0; i < this.numVertices; i++) {
+                for (int j = 0; j < this.numVertices; j++) {
+                    int ik = dist.get(i).get(k);
+                    int kj = dist.get(k).get(j);
+                    int ij = dist.get(i).get(j);
+                    if (ik != INF && kj != INF && ik + kj < ij) {
+                        dist.get(i).set(j, ik + kj);
+                    }
+                }
+            }
+        }
+
+        return dist;
+    }
+
+
+    // Disjoint Set Union (Union-Find)
+//    public void enableDisjointSet() {
+//        if (this.parentDisjointSet == null) {
+//            this.parentDisjointSet = new DisjointSet(this.numVertices);
+//        }
+//    }
+//
+//    public int find(int x) {
+//        enableDisjointSet();
+//        return this.parentDisjointSet.find(x);
+//    }
+//
+//    public void union(int x, int y) {
+//        enableDisjointSet();
+//        this.parentDisjointSet.union(x, y);
+//    }
+//
+//    // for path compression (more efficient)
+//    public int findWithCompression(int x) {
+//        enableDisjointSet();
+//        return this.parentDisjointSet.findWithCompression(x);
+//    }
 
 }

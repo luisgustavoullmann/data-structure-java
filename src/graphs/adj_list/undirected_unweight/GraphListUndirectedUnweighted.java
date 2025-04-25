@@ -1,10 +1,13 @@
 package graphs.adj_list.undirected_unweight;
 
+import graphs.adj_list.directed_weighted.DisjointSet;
+
 import java.util.*;
 
 public class GraphListUndirectedUnweighted {
     private int numVertices;
     private List<List<Integer>> adjList;
+    private DisjointSet parentDisjointSet = null;
 
     public GraphListUndirectedUnweighted(int numVertices) {
         this.numVertices = numVertices;
@@ -117,5 +120,28 @@ public class GraphListUndirectedUnweighted {
                 }
             }
         }
+    }
+
+    // Disjoint Set Union (Union-Find)
+    public void enableDisjointSet() {
+        if (this.parentDisjointSet == null) {
+            this.parentDisjointSet = new DisjointSet(this.numVertices);
+        }
+    }
+
+    public int find(int x) {
+        enableDisjointSet();
+        return this.parentDisjointSet.find(x);
+    }
+
+    public void union(int x, int y) {
+        enableDisjointSet();
+        this.parentDisjointSet.union(x, y);
+    }
+
+    // for path compression (more efficient)
+    public int findWithCompression(int x) {
+        enableDisjointSet();
+        return this.parentDisjointSet.findWithCompression(x);
     }
 }

@@ -65,5 +65,24 @@ public class MainGraphListDirectedWeighted {
         List<Integer> distances = g.bellmanFord(0);
         System.out.println("Shortest distances from source 0:");
         System.out.println(distances);
+
+
+
+        // Run Floyd-Warshall
+        System.out.println();
+        List<List<Integer>> distFloydWarshall = g.floydWarshall();
+
+        // Print result
+        System.out.println("Floyd-Warshall distance matrix:");
+        for (int i = 0; i < distFloydWarshall.size(); i++) {
+            for (int j = 0; j < distFloydWarshall.get(i).size(); j++) {
+                if (distFloydWarshall.get(i).get(j) == Integer.MAX_VALUE) {
+                    System.out.print("INF ");
+                } else {
+                    System.out.print(distFloydWarshall.get(i).get(j) + " ");
+                }
+            }
+            System.out.println();
+        }
     }
 }

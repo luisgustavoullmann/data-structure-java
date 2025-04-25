@@ -32,5 +32,25 @@ public class MainGraphListUndirectedUnweighted {
 
         System.out.println("DFS - Iterator");
         g.dfsIterator(0);
+
+
+        // Disjoint Set Union (Union-Find)
+        // Union operations: merge sets
+        System.out.println();
+        g.union(0, 1);
+        g.union(2, 3);
+        g.union(1, 2);
+
+        // Find operations: get representative of each set
+        System.out.println("Representative of vertex 0: " + g.find(0));
+        System.out.println("Representative of vertex 3: " + g.find(3));
+        System.out.println("Representative of vertex 4: " + g.find(4));
+
+        // Find with path compression
+        System.out.println("Representative of vertex 0 (with path compression): " + g.findWithCompression(0));
+
+        // Check if vertices are in the same set
+        System.out.println("Are vertices 0 and 3 in the same set? " + (g.find(0) == g.find(3)));
+        System.out.println("Are vertices 0 and 4 in the same set? " + (g.find(0) == g.find(4)));
     }
 }
