@@ -1,11 +1,15 @@
 package graphs.adj_list.directed_weighted;
 
+import graphs.adj_list.DisjointSet;
+import graphs.adj_list.MinHeap;
+import graphs.adj_list.MinimumSpanningTree;
+
 import java.util.*;
 
 public class GraphListDirectedWeighted {
     private int numVertices;
     private List<List<Edge>> adjList;
-//    private DisjointSet parentDisjointSet = null;
+    private DisjointSet parentDisjointSet = null;
 
     private static class Edge {
         int dest;
@@ -358,28 +362,95 @@ public class GraphListDirectedWeighted {
         return dist;
     }
 
+    // Before use these methods below, you must transform to undirected and weighted graph
 
     // Disjoint Set Union (Union-Find)
-//    public void enableDisjointSet() {
-//        if (this.parentDisjointSet == null) {
-//            this.parentDisjointSet = new DisjointSet(this.numVertices);
-//        }
-//    }
-//
-//    public int find(int x) {
-//        enableDisjointSet();
-//        return this.parentDisjointSet.find(x);
-//    }
-//
-//    public void union(int x, int y) {
-//        enableDisjointSet();
-//        this.parentDisjointSet.union(x, y);
-//    }
-//
-//    // for path compression (more efficient)
-//    public int findWithCompression(int x) {
-//        enableDisjointSet();
-//        return this.parentDisjointSet.findWithCompression(x);
-//    }
+    public void enableDisjointSet() {
+        if (this.parentDisjointSet == null) {
+            this.parentDisjointSet = new DisjointSet(this.numVertices);
+        }
+    }
+
+    public int find(int x) {
+        enableDisjointSet();
+        return this.parentDisjointSet.find(x);
+    }
+
+    public void union(int x, int y) {
+        enableDisjointSet();
+        this.parentDisjointSet.union(x, y);
+    }
+
+    // for path compression (more efficient)
+    public int findWithCompression(int x) {
+        enableDisjointSet();
+        return this.parentDisjointSet.findWithCompression(x);
+    }
+
+    public MinimumSpanningTree kruskal() {
+        List<int[]> sortedEdges = new ArrayList<>(getAllEdges());
+        sortedEdges.sort(Comparator.comparingInt(edge -> edge[2]));
+
+        enableDisjointSet();
+        DisjointSet disjointSet = this.parentDisjointSet;
+        List<int[]> mst = new ArrayList<>();
+        int totalWeight = 0;
+
+        for (int[] edge : sortedEdges) {
+            int u = edge[0];
+            int v = edge[0];
+            int weight = edge[0];
+
+            if (disjointSet.findWithCompression(u) != disjointSet.findWithCompression(v)) {
+                disjointSet.union(u, v);
+                mst.add(new int[]{u, v, weight});
+                totalWeight += weight;
+            }
+        }
+        return new MinimumSpanningTree(mst, totalWeight);
+    }
+
+
+
+
+
+
+    // Prim - Minimum Spanning Tree - just for undirected but weighted graphs
+    public MinimumSpanningTree primMST(int source) {
+        MinHeap minHeap = new MinHeap();
+        boolean[] visited = new boolean[this.numVertices];
+        List<int[]> mstEdges = new ArrayList<>();
+        int totalWeight = 0;
+
+        visited[source] = true;
+        for (Edge edge : this.adjList.get(source)) {
+            minHeap.insert(new int[]{source, edge.dest, edge.weight});
+        }
+
+        while (!minHeap.isEmpty() && mstEdges.size() < this.numVertices -1) {
+            int[] edge = minHeap.extractMin();
+            int from = edge[0];
+            int to = edge[1];
+            int weight = edge[2];
+
+            if (visited[to]) continue;
+
+            visited[to] = true;
+            mstEdges.add(edge);
+            totalWeight += weight;
+
+            for (Edge next : this.adjList.get(to)) {
+                if (!visited[next.dest]) {
+                    minHeap.insert(new int[]{to, next.dest, next.weight});
+                }
+            }
+        }
+
+        for (boolean v : visited) {
+            if (!v) return null;
+        }
+
+        return new MinimumSpanningTree(mstEdges, totalWeight);
+    }
 
 }

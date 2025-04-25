@@ -1,6 +1,6 @@
 package graphs.adj_list.undirected_unweight;
 
-import graphs.adj_list.directed_weighted.DisjointSet;
+import graphs.adj_list.DisjointSet;
 
 import java.util.*;
 

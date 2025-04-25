@@ -1,4 +1,4 @@
-package graphs.adj_list.directed_weighted;
+package graphs.adj_list;
 
 import java.util.ArrayList;
 import java.util.List;

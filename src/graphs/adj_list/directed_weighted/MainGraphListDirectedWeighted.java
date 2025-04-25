@@ -1,5 +1,7 @@
 package graphs.adj_list.directed_weighted;
 
+import graphs.adj_list.MinimumSpanningTree;
+
 import java.util.List;
 
 public class MainGraphListDirectedWeighted {
@@ -84,5 +86,35 @@ public class MainGraphListDirectedWeighted {
             }
             System.out.println();
         }
+
+        // Runs Prim's algorithm starting from vertex 0
+        System.out.println();
+        MinimumSpanningTree mst = g.primMST(0);
+
+        if (mst == null) {
+            System.out.println("The graph is not connected. MST could not be constructed.");
+        } else {
+            System.out.println("Edges of the Minimum Spanning Tree:");
+            for (int[] edge : mst.getMstEdges()) {
+                System.out.printf("%d - %d (weight: %d)%n", edge[0], edge[1], edge[2]);
+            }
+            System.out.println("Total weight of the MST: " + mst.getTotalWeight());
+        }
+
+
+        // Run Kruskal's algorithm to find the Minimum Spanning Tree (MST)
+        System.out.println();
+        System.out.println("Running Kruskal's algorithm...");
+         mst = g.kruskal();
+
+        // Print the result
+        System.out.println("\nEdges in the Minimum Spanning Tree:");
+        for (int[] edge : mst.getMstEdges()) {
+            int u = edge[0], v = edge[1], w = edge[2];
+            System.out.println(u + " - " + v + " (weight: " + w + ")");
+        }
+
+        System.out.println("Total weight of the MST: " + mst.getTotalWeight());
+
     }
 }
