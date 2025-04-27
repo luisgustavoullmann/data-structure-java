@@ -69,7 +69,6 @@ public class MainGraphListDirectedWeighted {
         System.out.println(distances);
 
 
-
         // Run Floyd-Warshall
         System.out.println();
         List<List<Integer>> distFloydWarshall = g.floydWarshall();
