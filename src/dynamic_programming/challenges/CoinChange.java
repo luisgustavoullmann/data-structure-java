@@ -1,4 +1,4 @@
-package dynamic_programming;
+package dynamic_programming.challenges;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,13 +6,13 @@ import java.util.Map;
 // https://leetcode.com/problems/coin-change/description/
 public class CoinChange {
 
-    public static int minCoinsNaive(int v, int[] c) {
-        if (v == 0) return 0;
+    public static int minCoinsNaive(int amount, int[] c) {
+        if (amount == 0) return 0;
 
         int result = Integer.MAX_VALUE;
 
         for (int coin : c) {
-            int subproblem = v - coin;
+            int subproblem = amount - coin;
             if (subproblem >= 0) {
                 result = Math.min(result, minCoinsNaive(subproblem, c) + 1);
             }
@@ -27,32 +27,32 @@ public class CoinChange {
         return auxMinCoinsTopdown(memory, v, coins);
     }
 
-    private static int auxMinCoinsTopdown(Map<Integer, Integer> memory, int v, int[] coins) {
-        if (memory.containsKey(v)) return memory.get(v);
-        if (v == 0) return 0;
+    private static int auxMinCoinsTopdown(Map<Integer, Integer> memory, int amount, int[] coins) {
+        if (memory.containsKey(amount)) return memory.get(amount);
+        if (amount == 0) return 0;
 
         int result = Integer.MAX_VALUE;
 
         for (int coin : coins) {
-            int subproblem = v - coin;
+            int subproblem = amount - coin;
             if (subproblem >= 0) {
                 result = Math.min(result, auxMinCoinsTopdown(memory, subproblem, coins) + 1);
             }
         }
-        memory.put(v, result);
+        memory.put(amount, result);
         return result;
     }
 
-    // O(v * n)
-    public static int minCoinsBottomUp(int v, int[] coins) {
-        int[] memory = new int[v + 1];
-        for (int i = 1; i <= v; i++) {
+    // O(amount * n)
+    public static int minCoinsBottomUp(int amount, int[] coins) {
+        int[] memory = new int[amount + 1];
+        for (int i = 1; i <= amount; i++) {
             memory[i] = Integer.MAX_VALUE;
         }
 
         memory[0] = 0;
 
-        for (int i = 1; i <= v; i++) {
+        for (int i = 1; i <= amount; i++) {
             for (int coin : coins) {
                 int subproblem = i - coin;
                 if (subproblem >= 0 && memory[subproblem] != Integer.MAX_VALUE) {
@@ -61,7 +61,7 @@ public class CoinChange {
             }
         }
 
-        return memory[v] == Integer.MAX_VALUE ? -1 : memory[v];
+        return memory[amount] == Integer.MAX_VALUE ? -1 : memory[amount];
     }
 
 

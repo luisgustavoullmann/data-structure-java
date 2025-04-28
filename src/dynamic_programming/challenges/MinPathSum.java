@@ -1,4 +1,4 @@
-package dynamic_programming;
+package dynamic_programming.challenges;
 
 // https://leetcode.com/problems/minimum-path-sum/submissions/1619528197/
 public class MinPathSum {
